@@ -1,0 +1,16 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\backend",
+    "\\backend\\app",
+    "\\backend\\app\\Http",
+    "\\backend\\database",
+    "\\backend\\database\\migrations",
+    "\\backend\\resources",
+    "\\backend\\resources\\views",
+    "\\backend\\resources\\views\\authors",
+    "\\backend\\routes"
+  ],
+  "SelectedNode": "\\backend\\resources\\views\\authors\\index.blade.php",
+  "PreviewInSolutionExplorer": false
+}
