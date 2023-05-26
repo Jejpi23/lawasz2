@@ -3,10 +3,13 @@ import axios from 'axios';
 
 const Data_Admin = () => {
   const [data, setData] = useState([]);
+  const [authors, setAuthors] = useState([]);
+  const [newBook, setNewBook] = useState({ title: '', author: '', price: '' });
   const [editingData, setEditingData] = useState(null);
 
   useEffect(() => {
     fetchData();
+    fetchAuthors();
   }, []);
 
   const fetchData = () => {
@@ -19,17 +22,36 @@ const Data_Admin = () => {
       });
   };
 
+  const fetchAuthors = () => {
+    axios.get('http://localhost:8000/api/authors')
+      .then(response => {
+        setAuthors(response.data);
+      })
+      .catch(error => {
+        console.error(error);
+      });
+  };
+
   const handleInputChange = e => {
     if (editingData) {
       setEditingData({ ...editingData, [e.target.name]: e.target.value });
+    } else {
+      setNewBook({ ...newBook, [e.target.name]: e.target.value });
     }
   };
 
-  const updateData = () => {
-    if (editingData) {
-      axios.put(`http://localhost:8000/api/books/${editingData._id}`, editingData)
+  const addBook = () => {
+    const selectedAuthor = authors.find(author => author._id === newBook.author);
+    if (selectedAuthor) {
+      const book = {
+        title: newBook.title,
+        author: selectedAuthor,
+        price: parseFloat(newBook.price).toFixed(2),
+      };
+
+      axios.post('http://localhost:8000/api/books', book)
         .then(response => {
-          setEditingData(null);
+          setNewBook({ title: '', author: '', price: '' });
           fetchData();
         })
         .catch(error => {
@@ -38,19 +60,68 @@ const Data_Admin = () => {
     }
   };
 
+  const updateData = () => {
+    if (editingData) {
+      const selectedAuthor = authors.find(author => author._id === editingData.author);
+      if (selectedAuthor) {
+        const updatedData = {
+          ...editingData,
+          author: selectedAuthor,
+          price: parseFloat(editingData.price).toFixed(2),
+        };
+
+        axios.put(`http://localhost:8000/api/books/${editingData._id}`, updatedData)
+          .then(response => {
+            setEditingData(null);
+            fetchData();
+          })
+          .catch(error => {
+            console.error(error);
+          });
+      }
+    }
+  };
+
   return (
     <div>
       <h1>Data Admin</h1>
 
+      <h2>Add Book</h2>
+      <input
+        type="text"
+        name="title"
+        value={newBook.title}
+        placeholder="Title"
+        onChange={handleInputChange}
+      />
+      <select name="author" value={newBook.author} onChange={handleInputChange}>
+        <option value="">Select Author</option>
+        {authors.map(author => (
+          <option key={author._id} value={author._id}>
+            {author.firstname} {author.lastname}
+          </option>
+        ))}
+      </select>
+      <input
+        type="number"
+        name="price"
+        value={newBook.price}
+        placeholder="Price"
+        step="0.01"
+        onChange={handleInputChange}
+      />
+      <button onClick={addBook}>Add</button>
+
+      <h2>Data List</h2>
       <table>
         <thead>
           <tr>
             <th>Title</th>
-            <th>Author's Firstname</th>
-            <th>Author's Lastname</th>
+            <th>Author's First Name</th>
+            <th>Author's Last Name</th>
             <th>Author's Birth</th>
             <th>Price</th>
-            <th>Actions</th>
+            <th>Action</th>
           </tr>
         </thead>
         <tbody>
@@ -70,10 +141,23 @@ const Data_Admin = () => {
                       value={editingData.title}
                       onChange={handleInputChange}
                     />
+                    <select
+                      name="author"
+                      value={editingData.author._id}
+                      onChange={handleInputChange}
+                    >
+                      <option value="">Select Author</option>
+                      {authors.map(author => (
+                        <option key={author._id} value={author._id}>
+                          {author.firstname} {author.lastname}
+                        </option>
+                      ))}
+                    </select>
                     <input
-                      type="text"
+                      type="number"
                       name="price"
                       value={editingData.price}
+                      step="0.01"
                       onChange={handleInputChange}
                     />
                     <button onClick={updateData}>Save</button>
