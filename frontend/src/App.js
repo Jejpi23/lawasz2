@@ -1,11 +1,11 @@
 import React from 'react';
-import Data_Admin from './Data_Admin';
-
+import Data from './Data';
+import './App.css';
 const App = () => {
   return (
     <div>
       <h1>My Library</h1>
-      <Data_Admin />
+      <Data />
     </div>
   );
 };

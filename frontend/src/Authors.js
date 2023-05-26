@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import './Authors.css';
 
 const Authors = () => {
   const [authors, setAuthors] = useState([]);
-  const [newAuthor, setNewAuthor] = useState({ firstname: '', lastname: '', dateofbirth: '' });
+  const [newAuthor, setNewAuthor] = useState({ firstname: '', lastname: '', dateofbirth: '', nationality: '', biography: '' });
   const [editingAuthor, setEditingAuthor] = useState(null);
 
   useEffect(() => {
@@ -31,7 +32,7 @@ const Authors = () => {
   const addAuthor = () => {
     axios.post('http://localhost:8000/api/authors', newAuthor)
       .then(response => {
-        setNewAuthor({ firstname: '', lastname: '', dateofbirth: '' });
+        setNewAuthor({ firstname: '', lastname: '', dateofbirth: '', nationality: '', biography: '' });
         fetchAuthors();
       })
       .catch(error => {
@@ -64,44 +65,62 @@ const Authors = () => {
       });
   };
 
-  return (
-    <div>
+ return (
+    <div className="authors-container">
       <h1>Authors</h1>
 
-      <h2>Add Author</h2>
-      <input
-        type="text"
-        name="firstname"
-        value={newAuthor.firstname}
-        placeholder="First Name"
-        onChange={handleInputChange}
-      />
-      <input
-        type="text"
-        name="lastname"
-        value={newAuthor.lastname}
-        placeholder="Last Name"
-        onChange={handleInputChange}
-      />
-      <input
-        type="text"
-        name="dateofbirth"
-        value={newAuthor.dateofbirth}
-        placeholder="Date of Birth"
-        onChange={handleInputChange}
-      />
-      <button onClick={addAuthor}>Add</button>
+      <div className="add-author-form">
+        <h2>Add Author</h2>
+        <input
+          type="text"
+          name="firstname"
+          value={newAuthor.firstname}
+          placeholder="First Name"
+          onChange={handleInputChange}
+        />
+        <input
+          type="text"
+          name="lastname"
+          value={newAuthor.lastname}
+          placeholder="Last Name"
+          onChange={handleInputChange}
+        />
+        <input
+          type="text"
+          name="dateofbirth"
+          value={newAuthor.dateofbirth}
+          placeholder="Date of Birth"
+          onChange={handleInputChange}
+        />
+        <input
+          type="text"
+          name="nationality"
+          value={newAuthor.nationality}
+          placeholder="Nationality"
+          onChange={handleInputChange}
+        />
+        <input
+          type="text"
+          name="biography"
+          value={newAuthor.biography}
+          placeholder="Biography"
+          onChange={handleInputChange}
+        />
+        <button onClick={addAuthor}>Add</button>
+      </div>
 
       <h2>Authors List</h2>
-      <ul>
+      <ul className="authors-list">
         {authors.map(author => (
-          <li key={author._id}>
+          <li key={author._id} className="author-item">
             <strong>First Name:</strong> {author.firstname}<br />
             <strong>Last Name:</strong> {author.lastname}<br />
             <strong>Date of Birth:</strong> {author.dateofbirth}<br />
+            <strong>Nationality:</strong> {author.nationality}<br />
+            <strong>Biography:</strong> {author.biography}<br />
 
             {editingAuthor && editingAuthor._id === author._id ? (
-              <>
+              <div className="edit-author-form">
                 <input
                   type="text"
                   name="firstname"
@@ -120,14 +139,26 @@ const Authors = () => {
                   value={editingAuthor.dateofbirth}
                   onChange={handleInputChange}
                 />
+                <input
+                  type="text"
+                  name="nationality"
+                  value={editingAuthor.nationality}
+                  onChange={handleInputChange}
+                />
+                <input
+                  type="text"
+                  name="biography"
+                  value={editingAuthor.biography}
+                  onChange={handleInputChange}
+                />
                 <button onClick={updateAuthor}>Save</button>
                 <button onClick={() => setEditingAuthor(null)}>Cancel</button>
-              </>
+              </div>
             ) : (
-              <>
+              <div className="author-buttons">
                 <button onClick={() => editAuthor(author)}>Edit</button>
                 <button onClick={() => deleteAuthor(author._id)}>Delete</button>
-              </>
+              </div>
             )}
 
             <hr />

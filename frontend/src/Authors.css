@@ -1,0 +1,36 @@
+.authors-container {
+  text-align: center;
+  background-color: rgba(255, 255, 255, 0.8); /* Dodaliœmy przezroczystoœæ dla t³a */
+  padding: 20px;
+  margin: 0 auto;
+  max-width: 600px;
+  border-radius: 10px;
+}
+
+.add-author-form {
+  margin-bottom: 20px;
+}
+
+.authors-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.author-item {
+  text-align: left;
+  margin-bottom: 20px;
+  padding: 10px;
+  background-color: #fff;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.edit-author-form,
+.author-buttons {
+  margin-top: 10px;
+}
+
+.author-buttons button {
+  margin-right: 5px;
+}

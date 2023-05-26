@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import './Books.css';
 
 const Books = () => {
   const [books, setBooks] = useState([]);
-  const [newBook, setNewBook] = useState({ title: '', author: '', price: '' });
+  const [newBook, setNewBook] = useState({ title: '', author: '', price: 0, genre: '', stock: 0, publisher: '' });
   const [authors, setAuthors] = useState([]);
   const [editingBook, setEditingBook] = useState(null);
 
@@ -54,7 +55,7 @@ const Books = () => {
   const addBook = () => {
     axios.post('http://localhost:8000/api/books', newBook)
       .then(response => {
-        setNewBook({ title: '', author: '', price: '' });
+        setNewBook({ title: '', author: '', price: 0, genre: '', stock: 0, publisher: '' });
         fetchBooks();
       })
       .catch(error => {
@@ -86,44 +87,73 @@ const Books = () => {
         console.error(error);
       });
   };
-
-  return (
-    <div>
+    return (
+    <div className="books-container">
       <h1>Books</h1>
 
-      <h2>Add Book</h2>
-      <input
-        type="text"
-        name="title"
-        value={newBook.title}
-        placeholder="Title"
-        onChange={handleInputChange}
-      />
-      <select name="author" value={newBook.author._id} onChange={handleAuthorSelect}>
-        <option value="">Select Author</option>
-        {authors.map(author => (
-          <option key={author._id} value={author._id}>{author.firstname} {author.lastname}</option>
-        ))}
-      </select>
-      <input
-        type="text"
-        name="price"
-        value={newBook.price}
-        placeholder="Price"
-        onChange={handleInputChange}
-      />
-      <button onClick={addBook}>Add</button>
+      <div className="add-book-form">
+        <h2>Add Book</h2>
+        <input
+          type="text"
+          name="title"
+          value={newBook.title}
+          placeholder="Title"
+          onChange={handleInputChange}
+        />
+        <select name="author" value={newBook.author} onChange={handleAuthorSelect}>
+          <option value="">Select Author</option>
+          {authors.map(author => (
+            <option key={author._id} value={author._id}>{author.firstname} {author.lastname}</option>
+          ))}
+        </select>
+        <input
+          type="number"
+          name="price"
+          value={newBook.price}
+          placeholder="Price"
+          onChange={handleInputChange}
+        />
+        <select name="genre" value={newBook.genre} onChange={handleInputChange}>
+          <option value="">Select Genre</option>
+          <option value="Fantasy">Fantasy</option>
+          <option value="Science Fiction">Science Fiction</option>
+          <option value="Mystery">Mystery</option>
+          <option value="Romance">Romance</option>
+          <option value="Thriller">Thriller</option>
+          <option value="Epopeja">Epopeja</option>
+          <option value="Wiersz">Wiersz</option>
+          <option value="Poradnik">Poradnik</option>
+        </select>
+        <input
+          type="number"
+          name="stock"
+          value={newBook.stock}
+          placeholder="Stock"
+          onChange={handleInputChange}
+        />
+        <input
+          type="text"
+          name="publisher"
+          value={newBook.publisher}
+          placeholder="Publisher"
+          onChange={handleInputChange}
+        />
+        <button onClick={addBook}>Add</button>
+      </div>
 
       <h2>Books List</h2>
-      <ul>
+      <ul className="books-list">
         {books.map(book => (
-          <li key={book._id}>
+          <li key={book._id} className="book-item">
             <strong>Title:</strong> {book.title}<br />
             <strong>Author:</strong> {book.author.firstname} {book.author.lastname}<br />
             <strong>Price:</strong> {book.price}<br />
+            <strong>Genre:</strong> {book.genre}<br />
+            <strong>Stock:</strong> {book.stock}<br />
+            <strong>Publisher:</strong> {book.publisher}<br />
 
             {editingBook && editingBook._id === book._id ? (
-              <>
+              <div className="edit-book-form">
                 <input
                   type="text"
                   name="title"
@@ -137,19 +167,42 @@ const Books = () => {
                   ))}
                 </select>
                 <input
-                  type="text"
+                  type="number"
                   name="price"
                   value={editingBook.price}
                   onChange={handleInputChange}
                 />
+                <select name="genre" value={editingBook.genre} onChange={handleInputChange}>
+                  <option value="">Select Genre</option>
+                  <option value="Fantasy">Fantasy</option>
+                  <option value="Science Fiction">Science Fiction</option>
+                  <option value="Mystery">Mystery</option>
+                  <option value="Romance">Romance</option>
+                  <option value="Thriller">Thriller</option>
+                  <option value="Epopeja">Epopeja</option>
+                  <option value="Wiersz">Wiersz</option>
+                  <option value="Poradnik">Poradnik</option>
+                </select>
+                <input
+                  type="number"
+                  name="stock"
+                  value={editingBook.stock}
+                  onChange={handleInputChange}
+                />
+                <input
+                  type="text"
+                  name="publisher"
+                  value={editingBook.publisher}
+                  onChange={handleInputChange}
+                />
                 <button onClick={updateBook}>Save</button>
                 <button onClick={() => setEditingBook(null)}>Cancel</button>
-              </>
+              </div>
             ) : (
-              <>
+              <div className="book-buttons">
                 <button onClick={() => editBook(book)}>Edit</button>
                 <button onClick={() => deleteBook(book._id)}>Delete</button>
-              </>
+              </div>
             )}
 
             <hr />
