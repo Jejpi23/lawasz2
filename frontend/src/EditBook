@@ -1,0 +1,27 @@
+import React, { useState } from 'react';
+import axios from 'axios';
+
+const EditBook = ({ book }) => {
+  const [title, setTitle] = useState(book.title);
+
+  const handleEditBook = async () => {
+    try {
+      const response = await axios.put(`/api/books/${book.id}`, { title });
+      console.log(response.data); // Zwrócona odpowiedŸ od backendu
+      // Opcjonalnie, mo¿na zaktualizowaæ listê ksi¹¿ek po edycji
+      // poprzez wywo³anie odpowiedniej metody przekazanej przez props
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  return (
+    <div>
+      <h2>Edit Book</h2>
+      <input type="text" value={title} onChange={e => setTitle(e.target.value)} />
+      <button onClick={handleEditBook}>Save</button>
+    </div>
+  );
+};
+
+export default EditBook;

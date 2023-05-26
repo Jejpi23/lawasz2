@@ -4,13 +4,12 @@
     "\\backend",
     "\\backend\\app",
     "\\backend\\app\\Http",
-    "\\backend\\database",
-    "\\backend\\database\\migrations",
+    "\\backend\\app\\Models",
+    "\\backend\\app\\Providers",
+    "\\backend\\config",
     "\\backend\\resources",
-    "\\backend\\resources\\views",
-    "\\backend\\resources\\views\\authors",
-    "\\backend\\routes"
+    "\\frontend",
+    "\\frontend\\src"
   ],
-  "SelectedNode": "\\backend\\resources\\views\\authors\\index.blade.php",
   "PreviewInSolutionExplorer": false
 }
