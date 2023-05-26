@@ -1,5 +1,5 @@
 body {
-  background-image: url('https://www.tapeciarnia.pl/tapety/normalne/tapeta-biblioteka.jpg'); /* Zast¹p 'background-image.jpg' odpowiednim adresem URL obrazka t³a */
+  background-image: url('https://www.tapeciarnia.pl/tapety/normalne/tapeta-biblioteka.jpg');
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
@@ -25,4 +25,14 @@ body {
 
 .navbar a:hover {
   text-decoration: underline;
+}
+
+.welcome {
+  border: 2px solid #fff;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: #fff;
+  padding: 10px;
+  text-align: center;
+  font-size: 24px;
+  margin-bottom: 20px;
 }
