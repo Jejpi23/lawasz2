@@ -9,8 +9,8 @@ class AuthorController extends Controller
 {
     public function index()
     {
-        $authors = Author::all();
-        return response()->json($authors);
+       $author  = Author::all();
+        return response()->json($author);
     }
 
     public function store(Request $request)
@@ -38,4 +38,5 @@ class AuthorController extends Controller
         $author->delete();
         return response()->json('Author deleted successfully');
     }
+
 }
