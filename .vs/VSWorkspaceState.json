@@ -4,12 +4,13 @@
     "\\backend",
     "\\backend\\app",
     "\\backend\\app\\Http",
-    "\\backend\\app\\Models",
-    "\\backend\\app\\Providers",
+    "\\backend\\app\\Http\\Controllers",
     "\\backend\\config",
     "\\backend\\resources",
+    "\\backend\\routes",
     "\\frontend",
     "\\frontend\\src"
   ],
+  "SelectedNode": "\\backend\\app\\Http\\Controllers\\AuthController.php",
   "PreviewInSolutionExplorer": false
 }
