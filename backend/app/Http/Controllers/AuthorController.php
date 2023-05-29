@@ -15,6 +15,11 @@ class AuthorController extends Controller
 
     public function store(Request $request)
     {
+    $validatedData = $request->validate([
+            'firstname' => 'required',
+            'lastname' => 'required',
+
+        ]);
         $author = Author::create($request->all());
         return response()->json($author);
     }
@@ -27,6 +32,11 @@ class AuthorController extends Controller
 
     public function update(Request $request, $id)
     {
+    $validatedData = $request->validate([
+            'firstname' => 'required',
+            'lastname' => 'required',
+           
+        ]);
         $author = Author::findOrFail($id);
         $author->update($request->all());
         return response()->json($author);

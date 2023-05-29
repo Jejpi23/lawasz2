@@ -2,15 +2,28 @@
 
 namespace App\Models;
 
-use Jenssegers\Mongodb\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Jenssegers\Mongodb\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+use Tymon\JWTAuth\Contracts\JWTSubject;
 use Laravel\Sanctum\HasApiTokens;
-use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class User extends Model
+class User extends Authenticatable implements JWTSubject
 {
-    use HasApiTokens;
+    use HasApiTokens, HasFactory, Notifiable;
+
     protected $connection = 'mongodb';
     protected $collection = 'users';
     protected $primaryKey = '_id';
     protected $guarded = [];
+
+    public function getJWTIdentifier()
+    {
+        return $this->getKey();
+    }
+
+    public function getJWTCustomClaims()
+    {
+        return [];
+    }
 }

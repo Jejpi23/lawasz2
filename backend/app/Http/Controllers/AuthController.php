@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
 use Illuminate\Http\Request;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
 
 class AuthController extends Controller
 {
@@ -22,13 +21,12 @@ class AuthController extends Controller
         $user->name = $request->name;
         $user->email = $request->email;
         $user->password = Hash::make($request->password);
-        $user->api_token = Str::random(60);
         $user->save();
 
         return response()->json(['message' => 'Registration successful']);
     }
 
-    public function login(Request $request)
+     public function login(Request $request)
     {
         $request->validate([
             'email' => 'required|email',
@@ -39,10 +37,11 @@ class AuthController extends Controller
 
         if (Auth::attempt($credentials)) {
             $user = Auth::user();
-            $token = $user->createToken('authToken')->plainTextToken;
-            return response()->json(['token' => $token], 200);
-        }
+            $token = $user->createToken('authToken')->accessToken;
 
-        return response()->json(['message' => 'Invalid credentials'], 401);
+            return response()->json(['token' => $token], 200);
+        } else {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
     }
 }

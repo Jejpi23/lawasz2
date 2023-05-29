@@ -6,6 +6,7 @@ const Authors = () => {
   const [authors, setAuthors] = useState([]);
   const [newAuthor, setNewAuthor] = useState({ firstname: '', lastname: '', dateofbirth: '', nationality: '', biography: '' });
   const [editingAuthor, setEditingAuthor] = useState(null);
+  const [errors, setErrors] = useState({});
 
   useEffect(() => {
     fetchAuthors();
@@ -29,15 +30,41 @@ const Authors = () => {
     }
   };
 
+  const validateAuthor = () => {
+    const errors = {};
+    if (!newAuthor.firstname) {
+      errors.firstname = 'First Name is required';
+    }
+    if (!newAuthor.lastname) {
+      errors.lastname = 'Last Name is required';
+    }
+    if (!newAuthor.dateofbirth) {
+      errors.dateofbirth = 'Date of Birth is required';
+    }
+    if (!newAuthor.nationality) {
+      errors.nationality = 'Nationality is required';
+    }
+    if (!newAuthor.biography) {
+      errors.biography = 'Biography is required';
+    }
+    setErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
   const addAuthor = () => {
-    axios.post('http://localhost:8000/api/authors', newAuthor)
-      .then(response => {
-        setNewAuthor({ firstname: '', lastname: '', dateofbirth: '', nationality: '', biography: '' });
-        fetchAuthors();
-      })
-      .catch(error => {
-        console.error(error);
-      });
+    if (validateAuthor()) {
+      axios.post('http://localhost:8000/api/authors', newAuthor)
+        .then(response => {
+          setNewAuthor({ firstname: '', lastname: '', dateofbirth: '', nationality: '', biography: '' });
+          fetchAuthors();
+        })
+        .catch(error => {
+          if (error.response && error.response.data) {
+            setErrors(error.response.data);
+          }
+          console.error(error);
+        });
+    }
   };
 
   const editAuthor = (author) => {
@@ -45,14 +72,19 @@ const Authors = () => {
   };
 
   const updateAuthor = () => {
-    axios.put(`http://localhost:8000/api/authors/${editingAuthor._id}`, editingAuthor)
-      .then(response => {
-        setEditingAuthor(null);
-        fetchAuthors();
-      })
-      .catch(error => {
-        console.error(error);
-      });
+    if (validateAuthor()) {
+      axios.put(`http://localhost:8000/api/authors/${editingAuthor._id}`, editingAuthor)
+        .then(response => {
+          setEditingAuthor(null);
+          fetchAuthors();
+        })
+        .catch(error => {
+          if (error.response && error.response.data) {
+            setErrors(error.response.data);
+          }
+          console.error(error);
+        });
+    }
   };
 
   const deleteAuthor = (id) => {
@@ -65,7 +97,7 @@ const Authors = () => {
       });
   };
 
- return (
+  return (
     <div className="authors-container">
       <h1>Authors</h1>
 
@@ -78,6 +110,7 @@ const Authors = () => {
           placeholder="First Name"
           onChange={handleInputChange}
         />
+        {errors.firstname && <span className="error">{errors.firstname}</span>}
         <input
           type="text"
           name="lastname"
@@ -85,6 +118,7 @@ const Authors = () => {
           placeholder="Last Name"
           onChange={handleInputChange}
         />
+        {errors.lastname && <span className="error">{errors.lastname}</span>}
         <input
           type="text"
           name="dateofbirth"
@@ -92,6 +126,7 @@ const Authors = () => {
           placeholder="Date of Birth"
           onChange={handleInputChange}
         />
+        {errors.dateofbirth && <span className="error">{errors.dateofbirth}</span>}
         <input
           type="text"
           name="nationality"
@@ -99,6 +134,7 @@ const Authors = () => {
           placeholder="Nationality"
           onChange={handleInputChange}
         />
+        {errors.nationality && <span className="error">{errors.nationality}</span>}
         <input
           type="text"
           name="biography"
@@ -106,6 +142,7 @@ const Authors = () => {
           placeholder="Biography"
           onChange={handleInputChange}
         />
+        {errors.biography && <span className="error">{errors.biography}</span>}
         <button onClick={addAuthor}>Add</button>
       </div>
 
@@ -127,30 +164,35 @@ const Authors = () => {
                   value={editingAuthor.firstname}
                   onChange={handleInputChange}
                 />
+                {errors.firstname && <span className="error">{errors.firstname}</span>}
                 <input
                   type="text"
                   name="lastname"
                   value={editingAuthor.lastname}
                   onChange={handleInputChange}
                 />
+                {errors.lastname && <span className="error">{errors.lastname}</span>}
                 <input
                   type="text"
                   name="dateofbirth"
                   value={editingAuthor.dateofbirth}
                   onChange={handleInputChange}
                 />
+                {errors.dateofbirth && <span className="error">{errors.dateofbirth}</span>}
                 <input
                   type="text"
                   name="nationality"
                   value={editingAuthor.nationality}
                   onChange={handleInputChange}
                 />
+                {errors.nationality && <span className="error">{errors.nationality}</span>}
                 <input
                   type="text"
                   name="biography"
                   value={editingAuthor.biography}
                   onChange={handleInputChange}
                 />
+                {errors.biography && <span className="error">{errors.biography}</span>}
                 <button onClick={updateAuthor}>Save</button>
                 <button onClick={() => setEditingAuthor(null)}>Cancel</button>
               </div>

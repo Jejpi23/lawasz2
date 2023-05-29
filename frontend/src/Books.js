@@ -7,6 +7,7 @@ const Books = () => {
   const [newBook, setNewBook] = useState({ title: '', author: '', price: 0, genre: '', stock: 0, publisher: '' });
   const [authors, setAuthors] = useState([]);
   const [editingBook, setEditingBook] = useState(null);
+  const [errors, setErrors] = useState({});
 
   useEffect(() => {
     fetchBooks();
@@ -52,15 +53,41 @@ const Books = () => {
     }
   };
 
+  const validateBook = () => {
+    const errors = {};
+    if (!newBook.title) {
+      errors.title = 'Title is required';
+    }
+    if (!newBook.author) {
+      errors.author = 'Author is required';
+    }
+    if (!newBook.price || newBook.price <= 0) {
+      errors.price = 'Price must be a positive number';
+    }
+    if (!newBook.genre) {
+      errors.genre = 'Genre is required';
+    }
+    if (!newBook.stock || newBook.stock < 0) {
+      errors.stock = 'Stock must be a non-negative number';
+    }
+    if (!newBook.publisher) {
+      errors.publisher = 'Publisher is required';
+    }
+    setErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
   const addBook = () => {
-    axios.post('http://localhost:8000/api/books', newBook)
-      .then(response => {
-        setNewBook({ title: '', author: '', price: 0, genre: '', stock: 0, publisher: '' });
-        fetchBooks();
-      })
-      .catch(error => {
-        console.error(error);
-      });
+    if (validateBook()) {
+      axios.post('http://localhost:8000/api/books', newBook)
+        .then(response => {
+          setNewBook({ title: '', author: '', price: 0, genre: '', stock: 0, publisher: '' });
+          fetchBooks();
+        })
+        .catch(error => {
+          console.error(error);
+        });
+    }
   };
 
   const editBook = (book) => {
@@ -92,7 +119,8 @@ const Books = () => {
       <h1>Books</h1>
 
       <div className="add-book-form">
-        <h2>Add Book</h2>
+               <h2>Add Book</h2>
+        {/* Title Input */}
         <input
           type="text"
           name="title"
@@ -100,12 +128,18 @@ const Books = () => {
           placeholder="Title"
           onChange={handleInputChange}
         />
+        {errors.title && <span className="error">{errors.title}</span>}
+        
+        {/* Author Select */}
         <select name="author" value={newBook.author} onChange={handleAuthorSelect}>
           <option value="">Select Author</option>
           {authors.map(author => (
             <option key={author._id} value={author._id}>{author.firstname} {author.lastname}</option>
           ))}
         </select>
+        {errors.author && <span className="error">{errors.author}</span>}
+
+        {/* Price Input */}
         <input
           type="number"
           name="price"
@@ -113,6 +147,9 @@ const Books = () => {
           placeholder="Price"
           onChange={handleInputChange}
         />
+        {errors.price && <span className="error">{errors.price}</span>}
+
+        {/* Genre Select */}
         <select name="genre" value={newBook.genre} onChange={handleInputChange}>
           <option value="">Select Genre</option>
           <option value="Fantasy">Fantasy</option>
@@ -124,6 +161,9 @@ const Books = () => {
           <option value="Wiersz">Wiersz</option>
           <option value="Poradnik">Poradnik</option>
         </select>
+        {errors.genre && <span className="error">{errors.genre}</span>}
+
+        {/* Stock Input */}
         <input
           type="number"
           name="stock"
@@ -131,6 +171,9 @@ const Books = () => {
           placeholder="Stock"
           onChange={handleInputChange}
         />
+        {errors.stock && <span className="error">{errors.stock}</span>}
+
+        {/* Publisher Input */}
         <input
           type="text"
           name="publisher"
@@ -138,6 +181,8 @@ const Books = () => {
           placeholder="Publisher"
           onChange={handleInputChange}
         />
+        {errors.publisher && <span className="error">{errors.publisher}</span>}
+
         <button onClick={addBook}>Add</button>
       </div>
 

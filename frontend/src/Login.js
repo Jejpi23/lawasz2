@@ -16,8 +16,6 @@ const LoginForm = () => {
 
       if (response.status === 200) {
         console.log('Zalogowano pomyœlnie.');
-        // Zapisz token JWT w lokalnym sk³adzie (localStorage) lub w ciasteczkach (cookies)
-        // Przekieruj u¿ytkownika na inn¹ stronê lub wykonaj inne operacje po zalogowaniu
       }
     } catch (error) {
       console.error('B³¹d podczas logowania:', error.response.data);

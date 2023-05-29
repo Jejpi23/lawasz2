@@ -15,6 +15,12 @@ class BookController extends Controller
 
     public function store(Request $request)
     {
+            $validatedData = $request->validate([
+            'title' => 'required',
+            'author' => 'required',
+            'price' => 'required|numeric',
+        ]);
+
         $book = Book::create($request->all());
         return response()->json($book);
     }
@@ -27,6 +33,12 @@ class BookController extends Controller
 
     public function update(Request $request, $id)
     {
+            $validatedData = $request->validate([
+            'title' => 'required',
+            'author' => 'required',
+            'price' => 'required|numeric',
+        ]);
+
         $book = Book::findOrFail($id);
         $book->update($request->all());
         return response()->json($book);
