@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import './login.css'; // Importowanie pliku CSS
 
 const LoginForm = () => {
   const [email, setEmail] = useState('');
@@ -23,7 +24,7 @@ const LoginForm = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} className="login-container"> {/* Dodanie klasy CSS */}
       <div>
         <label>Email:</label>
         <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
