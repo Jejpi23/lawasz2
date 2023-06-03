@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import './login.css'; // Importowanie pliku CSS
+import './login.css';
 
 const LoginForm = () => {
   const [email, setEmail] = useState('');
@@ -16,15 +16,20 @@ const LoginForm = () => {
       });
 
       if (response.status === 200) {
-        console.log('Zalogowano pomyœlnie.');
+        const token = response.data.token;
+        localStorage.setItem('token', token); // Store the JWT token in localStorage
+        console.log('Logged in successfully.');
+        // Redirect the user to the "Books" or "Authors" page
+        window.location.href = '/books'; // Redirect to the "Books" page
+        // window.location.href = '/authors'; // Redirect to the "Authors" page
       }
     } catch (error) {
-      console.error('B³¹d podczas logowania:', error.response.data);
+      console.error('Error during login:', error.response.data);
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="login-container"> {/* Dodanie klasy CSS */}
+    <form onSubmit={handleSubmit} className="login-container">
       <div>
         <label>Email:</label>
         <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} />

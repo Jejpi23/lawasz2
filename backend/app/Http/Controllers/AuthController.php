@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -26,7 +25,7 @@ class AuthController extends Controller
         return response()->json(['message' => 'Registration successful']);
     }
 
-     public function login(Request $request)
+    public function login(Request $request)
     {
         $request->validate([
             'email' => 'required|email',
@@ -37,7 +36,7 @@ class AuthController extends Controller
 
         if (Auth::attempt($credentials)) {
             $user = Auth::user();
-            $token = $user->createToken('authToken')->accessToken;
+            $token = $user->createToken('authToken');
 
             return response()->json(['token' => $token], 200);
         } else {

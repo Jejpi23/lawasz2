@@ -26,4 +26,7 @@ class User extends Authenticatable implements JWTSubject
     {
         return [];
     }
+    public function createToken(){
+        return $this->getKey();
+    }
 }
